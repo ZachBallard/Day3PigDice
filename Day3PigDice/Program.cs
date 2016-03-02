@@ -210,8 +210,10 @@ namespace Day3PigDice
                         }
                     }
 
-                    return whoFirst;
+                    
                 }
+
+                return whoFirst;
             }
         }
 
@@ -364,7 +366,7 @@ namespace Day3PigDice
                     displayDieGraphics(currentRoll);
 
                     currentPot = currentPot + currentRoll;
-                    
+
                     //check if 1
                     if (currentRoll == 1)
                     {
@@ -377,7 +379,7 @@ namespace Day3PigDice
                     {
                         Console.WriteLine($"\n{playerNames[currentPlayer]} you have {currentPot} on the line!");
                     }
-                    
+
                     //check if 100
                     if (playerValue[currentPlayer] == 100)
                     {
