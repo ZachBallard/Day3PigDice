@@ -8,6 +8,8 @@ namespace Day3PigDice
 {
     class Program
     {
+        static Random random = new Random();
+
         static void Main(string[] args)
         {
             bool Exit = false;
@@ -66,61 +68,9 @@ namespace Day3PigDice
                 Console.WriteLine("--> Type anything to continue <--");
                 Console.ReadLine();
 
-                bool isGameOver = false;
-                int currentPlayer = whoFirst;
-
                 resetPlayerValues(ref playerValue);
 
-                while (isGameOver == false)
-                {
-                    int currentRoll = 0;
-                    int currentPot = 0;
-
-                    Console.Clear();
-
-                    while (isBanking == false)
-                    {
-                        Console.Clear();
-                        Console.WriteLine();
-
-                        for (int i = 0; i < numOfPlayers; i++)
-                        {
-                            Console.WriteLine($"{playerNames[i]} has got {playerValue[i]} points");
-                        }
-
-                        Console.WriteLine($"\nIt's {playerNames[currentPlayer]}'s turn!");
-
-                        currentRoll = rollDie();
-
-                        displayDieGraphics(currentRoll);
-
-                        currentPot = currentPot + currentRoll;
-
-                        Console.WriteLine($"\n{playerNames[currentPlayer]} you have {currentPot} on the line!");
-
-                        //check if current has 100
-
-                        //check if roll was 1
-
-                        if (isComputerPlaying == false)
-                        {
-                            isBanking = bankOrRoll();
-                        }
-                        else
-                        {
-                            isBanking = bankOrRollAI();
-                        }
-
-                        if (isBanking == true)
-                        {
-                            playerValue[currentPlayer] = currentPot;
-                            break;
-                        }
-                    }
-
-                    isBanking = false;
-                    currentPlayer = nextPlayer(currentPlayer, numOfPlayers);
-                }
+                gamePlay(whoFirst);
             }
         }
         private static void Welcome()
@@ -145,26 +95,18 @@ namespace Day3PigDice
                 Console.WriteLine("(1) vs Computer (2) Player (3) Player (4) Player");
                 userInput = Console.ReadLine();
 
-                if (userInput == "1")
+                switch(userInput)
                 {
-                    return 1;
+                    case "1":
+                    case "2":
+                    case "3":
+                    case "4":
+                        return int.Parse(userInput) ;
+                    default:
+                        Console.WriteLine("\nThat wasn't a valid selection. Try again.");
+                        break;
                 }
-                else if (userInput == "2")
-                {
-                    return 2;
-                }
-                else if (userInput == "3")
-                {
-                    return 3;
-                }
-                else if (userInput == "4")
-                {
-                    return 4;
-                }
-                else
-                {
-                    Console.WriteLine("\nThat wasn't a valid selection. Try again.");
-                }
+                
             }
 
         }
@@ -277,7 +219,6 @@ namespace Day3PigDice
         private static int rollDie()
         {
             int result = 0;
-            Random random = new Random();
 
             result = random.Next(1, 6);
             return result;
@@ -285,6 +226,9 @@ namespace Day3PigDice
 
         private static int nextPlayer(int currentPlayer, int numOfPlayers)
         {
+
+           // return currentPlayer++ > numOfPlayers ? 1:  currentPlayer;
+
             if (currentPlayer < numOfPlayers)
             {
                 currentPlayer++;
@@ -313,7 +257,22 @@ namespace Day3PigDice
 
         private static void displayDieGraphics(int currentRoll)
         {
+           /* Console.WriteLine();
+            Console.WriteLine(@" _________ ");
+            Console.WriteLine(@"|         |");
 
+            switch (currentRoll)
+            {
+                case 1:
+                    Console.WriteLine(@"|         |");
+                    Console.WriteLine(@"|    0    |");
+                    Console.WriteLine(@"|         |");
+                    break;
+               
+            }
+
+            Console.WriteLine(@"|_________|");
+            */
             if (currentRoll == 1)
             {
                 Console.WriteLine();
@@ -373,6 +332,67 @@ namespace Day3PigDice
                 Console.WriteLine(@"|  0   0  |");
                 Console.WriteLine(@"|  0   0  |");
                 Console.WriteLine(@"|_________|");
+            }
+        }
+
+        private static void gamePlay(int whoFirst)
+        {
+            bool isGameOver = false;
+            int currentPlayer = whoFirst;
+
+            while (isGameOver == false)
+            {
+                int currentRoll = 0;
+                int currentPot = 0;
+
+                Console.Clear();
+
+                while (isBanking == false)
+                {
+                    Console.Clear();
+                    Console.WriteLine();
+
+                    for (int i = 0; i < numOfPlayers; i++)
+                    {
+                        Console.WriteLine($"{playerNames[i]} has got {playerValue[i]} points");
+                    }
+
+                    Console.WriteLine($"\nIt's {playerNames[currentPlayer]}'s turn!");
+
+                    currentRoll = rollDie();
+
+                    displayDieGraphics(currentRoll);
+
+                    currentPot = currentPot + currentRoll;
+
+                    Console.WriteLine($"\n{playerNames[currentPlayer]} you have {currentPot} on the line!");
+
+                    if (playerValue[currentPlayer] == 100)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("");
+                    }
+
+                    //check if roll was 1
+
+                    if (isComputerPlaying == false)
+                    {
+                        isBanking = bankOrRoll();
+                    }
+                    else
+                    {
+                        isBanking = bankOrRollAI();
+                    }
+
+                    if (isBanking == true)
+                    {
+                        playerValue[currentPlayer] = currentPot;
+                        break;
+                    }
+                }
+
+                isBanking = false;
+                currentPlayer = nextPlayer(currentPlayer, numOfPlayers);
             }
         }
 
