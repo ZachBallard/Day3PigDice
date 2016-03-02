@@ -22,7 +22,6 @@ namespace Day3PigDice
             var playerNames = new[] { "", "", "", "" };
 
             bool isComputerPlaying = false;
-            bool isBanking = false;
 
             while (Exit == false)
             {
@@ -70,7 +69,7 @@ namespace Day3PigDice
 
                 resetPlayerValues(ref playerValue);
 
-                gamePlay(whoFirst);
+                gamePlay(whoFirst, numOfPlayers, playerNames, playerValue);
             }
         }
         private static void Welcome()
@@ -95,18 +94,18 @@ namespace Day3PigDice
                 Console.WriteLine("(1) vs Computer (2) Player (3) Player (4) Player");
                 userInput = Console.ReadLine();
 
-                switch(userInput)
+                switch (userInput)
                 {
                     case "1":
                     case "2":
                     case "3":
                     case "4":
-                        return int.Parse(userInput) ;
+                        return int.Parse(userInput);
                     default:
                         Console.WriteLine("\nThat wasn't a valid selection. Try again.");
                         break;
                 }
-                
+
             }
 
         }
@@ -227,7 +226,7 @@ namespace Day3PigDice
         private static int nextPlayer(int currentPlayer, int numOfPlayers)
         {
 
-           // return currentPlayer++ > numOfPlayers ? 1:  currentPlayer;
+            // return currentPlayer++ > numOfPlayers ? 1:  currentPlayer;
 
             if (currentPlayer < numOfPlayers)
             {
@@ -257,22 +256,22 @@ namespace Day3PigDice
 
         private static void displayDieGraphics(int currentRoll)
         {
-           /* Console.WriteLine();
-            Console.WriteLine(@" _________ ");
-            Console.WriteLine(@"|         |");
+            /* Console.WriteLine();
+             Console.WriteLine(@" _________ ");
+             Console.WriteLine(@"|         |");
 
-            switch (currentRoll)
-            {
-                case 1:
-                    Console.WriteLine(@"|         |");
-                    Console.WriteLine(@"|    0    |");
-                    Console.WriteLine(@"|         |");
-                    break;
-               
-            }
+             switch (currentRoll)
+             {
+                 case 1:
+                     Console.WriteLine(@"|         |");
+                     Console.WriteLine(@"|    0    |");
+                     Console.WriteLine(@"|         |");
+                     break;
 
-            Console.WriteLine(@"|_________|");
-            */
+             }
+
+             Console.WriteLine(@"|_________|");
+             */
             if (currentRoll == 1)
             {
                 Console.WriteLine();
@@ -335,10 +334,11 @@ namespace Day3PigDice
             }
         }
 
-        private static void gamePlay(int whoFirst)
+        private static void gamePlay(int whoFirst, int numOfPlayers, string[] playerNames, int[] playerValue)
         {
             bool isGameOver = false;
             int currentPlayer = whoFirst;
+            bool isBanking = false;
 
             while (isGameOver == false)
             {
@@ -364,18 +364,28 @@ namespace Day3PigDice
                     displayDieGraphics(currentRoll);
 
                     currentPot = currentPot + currentRoll;
-
-                    Console.WriteLine($"\n{playerNames[currentPlayer]} you have {currentPot} on the line!");
-
+                    
+                    //check if 1
+                    if (currentRoll == 1)
+                    {
+                        Console.WriteLine($"\n{playerNames[currentPlayer]} you have rolled a 1 and lost your turn!");
+                        Console.WriteLine("--> Type anything to continue <--");
+                        Console.ReadLine();
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"\n{playerNames[currentPlayer]} you have {currentPot} on the line!");
+                    }
+                    
+                    //check if 100
                     if (playerValue[currentPlayer] == 100)
                     {
                         Console.Clear();
-                        Console.WriteLine("");
+                        Console.WriteLine($"\n{playerNames[currentPlayer]} is the winner!");
                     }
 
-                    //check if roll was 1
-
-                    if (isComputerPlaying == false)
+                    if (playerNames[currentPlayer] == "Computer")
                     {
                         isBanking = bankOrRoll();
                     }
