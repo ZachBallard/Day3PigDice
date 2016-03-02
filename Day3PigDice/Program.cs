@@ -24,10 +24,11 @@ namespace Day3PigDice
 
             while (Exit == false)
             {
-                //Welcome
                 Welcome();
-                //select 1-4 player
+
+                //get number of players
                 numOfPlayers = getNumPlayers();
+
                 //select dumb average careful smart AI
                 if (numOfPlayers == 1)
                 {
@@ -50,31 +51,75 @@ namespace Day3PigDice
                     playerNames[1] = "Computer";
                 }
 
-                //See who goes first - roll die and compair for higher
+                Console.Clear();
+
+                Console.WriteLine("\nLet's see who goes first!");
                 whoFirst = getOrderResults(numOfPlayers, ref playerValue);
 
                 for (int i = 0; i < numOfPlayers; i++)
                 {
-                    Console.WriteLine($"{playerNames[i]} got a {playerValue[i]}");
+                    displayDieGraphics(playerValue[i]);
+                    Console.WriteLine($"\n{playerNames[i]} got a {playerValue[i]}");
                 }
 
                 Console.WriteLine($"\n{playerNames[whoFirst]} will go first!");
+                Console.WriteLine("--> Type anything to continue <--");
+                Console.ReadLine();
 
                 bool isGameOver = false;
+                int currentPlayer = whoFirst;
+
+                resetPlayerValues(ref playerValue);
 
                 while (isGameOver == false)
                 {
+                    int currentRoll = 0;
+                    int currentPot = 0;
 
-                    while (true)
+                    Console.Clear();
+
+                    while (isBanking == false)
                     {
-                        
-                        //display roll
+                        Console.Clear();
+                        Console.WriteLine();
+
+                        for (int i = 0; i < numOfPlayers; i++)
+                        {
+                            Console.WriteLine($"{playerNames[i]} has got {playerValue[i]} points");
+                        }
+
+                        Console.WriteLine($"\nIt's {playerNames[currentPlayer]}'s turn!");
+
+                        currentRoll = rollDie();
+
+                        displayDieGraphics(currentRoll);
+
+                        currentPot = currentPot + currentRoll;
+
+                        Console.WriteLine($"\n{playerNames[currentPlayer]} you have {currentPot} on the line!");
+
                         //check if current has 100
+
                         //check if roll was 1
-                        //would you like to bank or roll?
+
+                        if (isComputerPlaying == false)
+                        {
+                            isBanking = bankOrRoll();
+                        }
+                        else
+                        {
+                            isBanking = bankOrRollAI();
+                        }
+
+                        if (isBanking == true)
+                        {
+                            playerValue[currentPlayer] = currentPot;
+                            break;
+                        }
                     }
 
-                    //change player
+                    isBanking = false;
+                    currentPlayer = nextPlayer(currentPlayer, numOfPlayers);
                 }
             }
         }
@@ -237,5 +282,99 @@ namespace Day3PigDice
             result = random.Next(1, 6);
             return result;
         }
+
+        private static int nextPlayer(int currentPlayer, int numOfPlayers)
+        {
+            if (currentPlayer < numOfPlayers)
+            {
+                currentPlayer++;
+            }
+            else
+            {
+                currentPlayer = 1;
+            }
+
+            return currentPlayer;
+        }
+
+        private static bool bankOrRollAI()
+        {
+            //unfinished ai choices
+            return true;
+        }
+
+        private static void resetPlayerValues(ref int[] playerValue)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                playerValue[i] = 0;
+            }
+        }
+
+        private static void displayDieGraphics(int currentRoll)
+        {
+
+            if (currentRoll == 1)
+            {
+                Console.WriteLine();
+                Console.WriteLine(@" _________ ");
+                Console.WriteLine(@"|         |");
+                Console.WriteLine(@"|         |");
+                Console.WriteLine(@"|    0    |");
+                Console.WriteLine(@"|         |");
+                Console.WriteLine(@"|_________|");
+            }
+            else if (currentRoll == 2)
+            {
+                Console.WriteLine();
+                Console.WriteLine(@" _________ ");
+                Console.WriteLine(@"|         |");
+                Console.WriteLine(@"|         |");
+                Console.WriteLine(@"|  0   0  |");
+                Console.WriteLine(@"|         |");
+                Console.WriteLine(@"|_________|");
+            }
+            else if (currentRoll == 3)
+            {
+                Console.WriteLine();
+                Console.WriteLine(@" _________ ");
+                Console.WriteLine(@"|         |");
+                Console.WriteLine(@"|    0    |");
+                Console.WriteLine(@"|         |");
+                Console.WriteLine(@"|  0   0  |");
+                Console.WriteLine(@"|_________|");
+            }
+            else if (currentRoll == 4)
+            {
+                Console.WriteLine();
+                Console.WriteLine(@" _________ ");
+                Console.WriteLine(@"|         |");
+                Console.WriteLine(@"|  0   0  |");
+                Console.WriteLine(@"|         |");
+                Console.WriteLine(@"|  0   0  |");
+                Console.WriteLine(@"|_________|");
+            }
+            else if (currentRoll == 5)
+            {
+                Console.WriteLine();
+                Console.WriteLine(@" _________ ");
+                Console.WriteLine(@"|         |");
+                Console.WriteLine(@"|  0   0  |");
+                Console.WriteLine(@"|    0    |");
+                Console.WriteLine(@"|  0   0  |");
+                Console.WriteLine(@"|_________|");
+            }
+            else
+            {
+                Console.WriteLine();
+                Console.WriteLine(@" _________ ");
+                Console.WriteLine(@"|         |");
+                Console.WriteLine(@"|  0   0  |");
+                Console.WriteLine(@"|  0   0  |");
+                Console.WriteLine(@"|  0   0  |");
+                Console.WriteLine(@"|_________|");
+            }
+        }
+
     }
 }
