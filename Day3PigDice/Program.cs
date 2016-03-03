@@ -236,8 +236,8 @@ namespace Day3PigDice
                     {
                         return true;
                     }
-                    int willBank = random.Next(0, 1);
-                    if (willBank == 1)
+                    int willBank = random.Next(1, 6);
+                    if (willBank <= 3)
                     {
                         return true;
                     }
@@ -382,6 +382,21 @@ namespace Day3PigDice
                         isBanking = bankOrRollAI(aiStyle, playerValue, currentPot);
                     }
 
+                    //pause screen for computer
+                    if (playerNames[currentPlayer] == "Computer" && isBanking == true && currentRoll != 1)
+                    {
+                        Console.WriteLine("\nThe Computer thinks it is better to bank now...");
+                        Console.WriteLine("--> Type anything to continue <--");
+                        Console.ReadLine();
+
+                    }
+                    if (playerNames[currentPlayer] == "Computer" && isBanking == false && currentRoll != 1)
+                    {
+                        Console.WriteLine("\nThe Computer is going to risk a roll...");
+                        Console.WriteLine("--> Type anything to continue <--");
+                        Console.ReadLine();
+                    }
+
                     if (isBanking == true)
                     {
                         playerValue[currentPlayer] = playerValue[currentPlayer] + currentPot;
@@ -410,20 +425,6 @@ namespace Day3PigDice
                     break;
                 }
 
-                //Pause screen if computer on select
-                if (playerNames[currentPlayer] == "Computer" && isBanking == true && currentRoll != 1)
-                {
-                    Console.WriteLine("\nThe Computer thinks it is better to bank now...");
-                    Console.WriteLine("--> Type anything to continue <--");
-                    Console.ReadLine();
-
-                }
-                if (playerNames[currentPlayer] == "Computer" && isBanking == false && currentRoll != 1)
-                {
-                    Console.WriteLine("\nThe Computer is going to risk a roll...");
-                    Console.WriteLine("--> Type anything to continue <--");
-                    Console.ReadLine();
-                }
                 isBanking = false;
                 currentPlayer = nextPlayer(currentPlayer, numOfPlayers);
             }
