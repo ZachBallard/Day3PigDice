@@ -333,6 +333,8 @@ namespace Day3PigDice
             int currentPlayer = whoFirst;
             bool isBanking = false;
 
+            clearPlayerValues(ref playerValue);
+
             while (true)
             {
                 int currentRoll = 0;
@@ -371,7 +373,7 @@ namespace Day3PigDice
                         Console.WriteLine($"\n{playerNames[currentPlayer]} you have {currentPot} on the line!");
                     }
 
-                    if (playerNames[currentPlayer] != "Computer")
+                    if (playerNames[currentPlayer] != "Computer" && currentRoll != 1)
                     {
                         isBanking = bankOrRoll();
                     }
@@ -404,22 +406,19 @@ namespace Day3PigDice
                         Console.WriteLine($"Better luck next time...");
                     }
                     Console.WriteLine($"\n{playerNames[currentPlayer]} is the winner!");
-
-                    Console.WriteLine("--> Type anything to continue <--");
-                    Console.ReadLine();
                     Exit = willExit();
                     break;
                 }
 
                 //Pause screen if computer on select
-                if (playerNames[currentPlayer] == "Computer" && isBanking == true)
+                if (playerNames[currentPlayer] == "Computer" && isBanking == true && currentRoll != 1)
                 {
                     Console.WriteLine("\nThe Computer thinks it is better to bank now...");
                     Console.WriteLine("--> Type anything to continue <--");
                     Console.ReadLine();
 
                 }
-                if (playerNames[currentPlayer] == "Computer" && isBanking == false)
+                if (playerNames[currentPlayer] == "Computer" && isBanking == false && currentRoll != 1)
                 {
                     Console.WriteLine("\nThe Computer is going to risk a roll...");
                     Console.WriteLine("--> Type anything to continue <--");
@@ -427,6 +426,14 @@ namespace Day3PigDice
                 }
                 isBanking = false;
                 currentPlayer = nextPlayer(currentPlayer, numOfPlayers);
+            }
+        }
+
+        private static void clearPlayerValues(ref int[] playerValues)
+        {
+            for(int i = 0; i < 4; i++)
+            {
+                playerValues[i] = 0;
             }
         }
 
