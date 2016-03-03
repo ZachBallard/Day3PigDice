@@ -54,33 +54,28 @@ namespace Day3PigDice
 
                 Console.Clear();
 
-                Console.WriteLine("\nLet's see who goes first!");
-                whoFirst = getOrderResults(numOfPlayers, ref playerValue);
+                Console.WriteLine("\nLet's see who goes first!\nWe roll until we get a player's number...");
 
-                for (int i = 0; i < numOfPlayers; i++)
-                {
-                    displayDieGraphics(playerValue[i]);
-                    Console.WriteLine($"\n{playerNames[i]} got a {playerValue[i]}");
-                }
+                whoFirst = getOrderResults(numOfPlayers);
+
+                displayDieGraphics(whoFirst+1);
 
                 Console.WriteLine($"\n{playerNames[whoFirst]} will go first!");
                 Console.WriteLine("--> Type anything to continue <--");
                 Console.ReadLine();
-
-                resetPlayerValues(ref playerValue);
 
                 gamePlay(whoFirst, numOfPlayers, playerNames, playerValue);
             }
         }
         private static void Welcome()
         {
-            Console.WriteLine(@"                                         _          _           ");
-            Console.WriteLine(@" \    / _  |  _  _  ._ _   _   _|_  _   |_) o  _   | \ o  _  _  ");
-            Console.WriteLine(@"  \/\/ (/_ | (_ (_) | | | (/_   |_ (_)  |   | (_|  |_/ | (_ (/_ ");
-            Console.WriteLine(@"            __              _                  _|               ");
-            Console.WriteLine(@" __ |_       /  _.  _ |_   |_)  _. | |  _. ._ _|   The Iron Yard");
-            Console.WriteLine(@"    |_) \/  /_ (_| (_ | |  |_) (_| | | (_| | (_|    (3/2/2016)  ");
-            Console.WriteLine(@"        /                                            ^^^^^^^^   ");
+            Console.WriteLine(@"                                          _          _          ");
+            Console.WriteLine(@"| |  |  _  ||  _  _   _ _   _   _|_  _   |_) 0  _   | \ 0  _  _ ");
+            Console.WriteLine(@"\_/\_/ (/_ || (_ (_) | | | (|_   |  (_)  |   | (_|  |_/ | (_ (|_");
+            Console.WriteLine(@"            ___              _                  _|              ");
+            Console.WriteLine(@" __ |_       //  _   _ |_   |_)  _  | |  _   _ _|  The Iron Yard");
+            Console.WriteLine(@" __ |_| \/  //_ (_| (_ | |  |_) (_| | | (_| | (_|   (3/2/2016)  ");
+            Console.WriteLine(@"       _/                                            ^^^^^^^^   ");
             Console.WriteLine(@"################################################################");
         }
 
@@ -176,34 +171,9 @@ namespace Day3PigDice
             }
         }
 
-        private static int getOrderResults(int numOfPlayers, ref int[] playerValue)
+        private static int getOrderResults(int numOfPlayers)
         {
-            int whoFirst = 0;
-
-            //give all players a value
-            for (int i = 0; i < numOfPlayers; i++)
-            {
-                playerValue[i] = rollDie();
-            }
-
-            for (int i = 0; i < numOfPlayers; i++)
-            {
-                while (playerValue[i] == playerValue[i++])
-                {
-                    playerValue[i++] = rollDie();
-                    playerValue[i] = rollDie();
-                }
-                if (playerValue[i] > playerValue[i++])
-                {
-                    whoFirst = i;
-                }
-                else
-                {
-                    whoFirst = i++;
-                }
-            }
-
-            return whoFirst;
+            return random.Next(0, (numOfPlayers-1));
         }
 
         private static int rollDie()
@@ -216,9 +186,9 @@ namespace Day3PigDice
 
         private static int nextPlayer(int currentPlayer, int numOfPlayers)
         {
-            if (currentPlayer++ < numOfPlayers)
+            if ((currentPlayer+1) < numOfPlayers)
             {
-                return currentPlayer++;
+                return currentPlayer+1;
             }
             else
             {
@@ -230,14 +200,6 @@ namespace Day3PigDice
         {
             //unfinished ai choices
             return true;
-        }
-
-        private static void resetPlayerValues(ref int[] playerValue)
-        {
-            for (int i = 0; i < 4; i++)
-            {
-                playerValue[i] = 0;
-            }
         }
 
         private static void displayDieGraphics(int currentRoll)
@@ -364,14 +326,6 @@ namespace Day3PigDice
                         Console.WriteLine($"\n{playerNames[currentPlayer]} you have {currentPot} on the line!");
                     }
 
-                    //check if 100
-                    if (playerValue[currentPlayer] == 100)
-                    {
-                        Console.Clear();
-                        Console.WriteLine($"\n{playerNames[currentPlayer]} is the winner!");
-                        break;
-                    }
-
                     if (playerNames[currentPlayer] != "Computer")
                     {
                         isBanking = bankOrRoll();
@@ -385,8 +339,32 @@ namespace Day3PigDice
                     {
                         playerValue[currentPlayer] = playerValue[currentPlayer] + currentPot;
                     }
+                } 
+                
+                //check if 100
+                if (playerValue[currentPlayer] >= 100)
+                {
+                    Console.Clear();
+                    Console.WriteLine($"\n{playerNames[currentPlayer]} is the winner!");
+                    Console.WriteLine("--> Type anything to continue <--");
+                    Console.ReadLine();
+                    break;
                 }
 
+                //Pause screen if computer on select
+                if(playerNames[currentPlayer] == "Computer" && isBanking == true)
+                {
+                    Console.WriteLine("\nThe Computer thinks it is better to bank now...");
+                    Console.WriteLine("--> Type anything to continue <--");
+                    Console.ReadLine();
+
+                }
+                if(playerNames[currentPlayer] == "Computer" && isBanking == false)
+                {
+                    Console.WriteLine("\nThe Computer is going to risk a roll...");
+                    Console.WriteLine("--> Type anything to continue <--");
+                    Console.ReadLine();
+                }
                 isBanking = false;
                 currentPlayer = nextPlayer(currentPlayer, numOfPlayers);
             }
