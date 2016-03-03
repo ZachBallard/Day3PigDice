@@ -180,41 +180,30 @@ namespace Day3PigDice
         {
             int whoFirst = 0;
 
-            while (true)
+            //give all players a value
+            for (int i = 0; i < numOfPlayers; i++)
             {
-                for (int i = 0; i < numOfPlayers; i++)
+                playerValue[i] = rollDie();
+            }
+
+            for (int i = 0; i < numOfPlayers; i++)
+            {
+                while (playerValue[i] == playerValue[i++])
                 {
+                    playerValue[i++] = rollDie();
                     playerValue[i] = rollDie();
                 }
-
-                for (int i = 0; i < numOfPlayers; i++)
+                if (playerValue[i] > playerValue[i++])
                 {
-                    for (int j = i + 1; j < numOfPlayers; j++)
-                    {
-                        if (playerValue[j] == playerValue[i])
-                        {
-                            while (playerValue[j] == playerValue[i])
-                            {
-                                playerValue[j] = rollDie();
-                                playerValue[i] = rollDie();
-                            }
-                        }
-
-                        if (playerValue[j] > playerValue[i])
-                        {
-                            whoFirst = j;
-                        }
-                        else
-                        {
-                            whoFirst = i;
-                        }
-                    }
-
-
+                    whoFirst = i;
                 }
-
-                return whoFirst;
+                else
+                {
+                    whoFirst = i++;
+                }
             }
+
+            return whoFirst;
         }
 
         private static int rollDie()
@@ -227,7 +216,7 @@ namespace Day3PigDice
 
         private static int nextPlayer(int currentPlayer, int numOfPlayers)
         {
-            if (currentPlayer++ < numOfPlayers && numOfPlayers != 2)
+            if (currentPlayer++ < numOfPlayers)
             {
                 return currentPlayer++;
             }
