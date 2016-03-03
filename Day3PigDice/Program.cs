@@ -9,12 +9,10 @@ namespace Day3PigDice
     class Program
     {
         static Random random = new Random();
+        static bool Exit = false;
 
         static void Main(string[] args)
         {
-            bool Exit = false;
-
-
             int numOfPlayers = 0;
             int aiStyle = 0;
             int whoFirst = 0;
@@ -25,6 +23,7 @@ namespace Day3PigDice
 
             while (Exit == false)
             {
+                Console.Clear();
                 Welcome();
 
                 //get number of players
@@ -247,7 +246,6 @@ namespace Day3PigDice
                         return false;
                     }
             }
-            return true;
         }
 
         private static void displayDieGraphics(int currentRoll)
@@ -332,11 +330,10 @@ namespace Day3PigDice
 
         private static void gamePlay(int whoFirst, int numOfPlayers, string[] playerNames, int[] playerValue, int aiStyle)
         {
-            bool isGameOver = false;
             int currentPlayer = whoFirst;
             bool isBanking = false;
 
-            while (isGameOver == false)
+            while (true)
             {
                 int currentRoll = 0;
                 int currentPot = 0;
@@ -393,9 +390,24 @@ namespace Day3PigDice
                 if (playerValue[currentPlayer] >= 100)
                 {
                     Console.Clear();
+                    if (playerNames[currentPlayer] != "Computer")
+                    {
+                        Console.WriteLine(@" _      _   _                                 |0| ");
+                        Console.WriteLine(@"|0|    |0| |0|                                |0| ");
+                        Console.WriteLine(@"|0| /\ |0|  _   ____     ____     ___   ____  |0| ");
+                        Console.WriteLine(@"\0 \||/ 0/ |0| |0 __0\  |0 __0\  / 0_| |0 _0|  _  ");
+                        Console.WriteLine(@" \0/  \0/  |0| |0|  |0| |0|  |0| |/___ |0|    |0| ");
+                        Console.WriteLine("################################################  ");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Better luck next time...");
+                    }
                     Console.WriteLine($"\n{playerNames[currentPlayer]} is the winner!");
+
                     Console.WriteLine("--> Type anything to continue <--");
                     Console.ReadLine();
+                    Exit = willExit();
                     break;
                 }
 
@@ -418,5 +430,26 @@ namespace Day3PigDice
             }
         }
 
+        private static bool willExit()
+        {
+            string userInput = "";
+
+            while (true)
+            {
+                Console.WriteLine("\nWould you like to play again? (y)es or (n)o");
+                userInput = Console.ReadLine();
+
+                switch (userInput)
+                {
+                    case "y":
+                        return false;
+                    case "n":
+                        return true;
+                    default:
+                        Console.WriteLine("\nThat wasn't a valid selection. Try again.");
+                        break;
+                }
+            }
+        }
     }
 }
