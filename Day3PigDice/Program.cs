@@ -58,7 +58,7 @@ namespace Day3PigDice
 
                 whoFirst = getOrderResults(numOfPlayers);
 
-                displayDieGraphics(whoFirst+1);
+                displayDieGraphics(whoFirst + 1);
 
                 Console.WriteLine($"\n{playerNames[whoFirst]} will go first!");
                 Console.WriteLine("--> Type anything to continue <--");
@@ -173,7 +173,7 @@ namespace Day3PigDice
 
         private static int getOrderResults(int numOfPlayers)
         {
-            return random.Next(0, (numOfPlayers-1));
+            return random.Next(0, (numOfPlayers - 1));
         }
 
         private static int rollDie()
@@ -186,9 +186,9 @@ namespace Day3PigDice
 
         private static int nextPlayer(int currentPlayer, int numOfPlayers)
         {
-            if ((currentPlayer+1) < numOfPlayers)
+            if ((currentPlayer + 1) < numOfPlayers)
             {
-                return currentPlayer+1;
+                return currentPlayer + 1;
             }
             else
             {
@@ -196,19 +196,49 @@ namespace Day3PigDice
             }
         }
 
-        private static bool bankOrRollAI(int aiStyle, int[] playerValue)
+        private static bool bankOrRollAI(int aiStyle, int[] playerValue, int currentPot)
         {
-            switch(aiStyle)
+            switch (aiStyle)
             {
                 case 4:
-                    return true;
+                    if (currentPot + playerValue[1] >= 100)
+                    {
+                        return true;
+                    }
+                    if (currentPot >= 16 && playerValue[0] <= 90)
+                    {
+                        return true;
+                    }
+                    if (currentPot + playerValue[1] >= playerValue[0] && playerValue[1] <= 80)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 case 3:
                     return true;
                 case 2:
-                    return true;
+                    if (currentPot + playerValue[1] >= 100)
+                    {
+                        return true;
+                    }
+                    if (currentPot <= 12 && playerValue[0] <= 90)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
                 default:
-                    int willBank = random.Next(0,1);
-                    if(willBank == 1)
+                    if (currentPot + playerValue[1] >= 100)
+                    {
+                        return true;
+                    }
+                    int willBank = random.Next(0, 1);
+                    if (willBank == 1)
                     {
                         return true;
                     }
@@ -350,15 +380,15 @@ namespace Day3PigDice
                     }
                     else
                     {
-                        isBanking = bankOrRollAI(aiStyle, playerValue);
+                        isBanking = bankOrRollAI(aiStyle, playerValue, currentPot);
                     }
 
                     if (isBanking == true)
                     {
                         playerValue[currentPlayer] = playerValue[currentPlayer] + currentPot;
                     }
-                } 
-                
+                }
+
                 //check if 100
                 if (playerValue[currentPlayer] >= 100)
                 {
@@ -370,14 +400,14 @@ namespace Day3PigDice
                 }
 
                 //Pause screen if computer on select
-                if(playerNames[currentPlayer] == "Computer" && isBanking == true)
+                if (playerNames[currentPlayer] == "Computer" && isBanking == true)
                 {
                     Console.WriteLine("\nThe Computer thinks it is better to bank now...");
                     Console.WriteLine("--> Type anything to continue <--");
                     Console.ReadLine();
 
                 }
-                if(playerNames[currentPlayer] == "Computer" && isBanking == false)
+                if (playerNames[currentPlayer] == "Computer" && isBanking == false)
                 {
                     Console.WriteLine("\nThe Computer is going to risk a roll...");
                     Console.WriteLine("--> Type anything to continue <--");
