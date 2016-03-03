@@ -48,7 +48,7 @@ namespace Day3PigDice
                 }
                 else
                 {
-                    playerNames[0] = getPlayerName(1);
+                    playerNames[0] = getPlayerName(0);
                     playerNames[1] = "Computer";
                 }
 
@@ -210,7 +210,7 @@ namespace Day3PigDice
                         }
                     }
 
-                    
+
                 }
 
                 return whoFirst;
@@ -227,19 +227,14 @@ namespace Day3PigDice
 
         private static int nextPlayer(int currentPlayer, int numOfPlayers)
         {
-
-            // return currentPlayer++ > numOfPlayers ? 1:  currentPlayer;
-
-            if (currentPlayer < numOfPlayers)
+            if (currentPlayer++ < numOfPlayers && numOfPlayers != 2)
             {
-                currentPlayer++;
+                return currentPlayer++;
             }
             else
             {
-                currentPlayer = 1;
+                return 0;
             }
-
-            return currentPlayer;
         }
 
         private static bool bankOrRollAI()
@@ -385,9 +380,10 @@ namespace Day3PigDice
                     {
                         Console.Clear();
                         Console.WriteLine($"\n{playerNames[currentPlayer]} is the winner!");
+                        break;
                     }
 
-                    if (playerNames[currentPlayer] == "Computer")
+                    if (playerNames[currentPlayer] != "Computer")
                     {
                         isBanking = bankOrRoll();
                     }
@@ -398,8 +394,7 @@ namespace Day3PigDice
 
                     if (isBanking == true)
                     {
-                        playerValue[currentPlayer] = currentPot;
-                        break;
+                        playerValue[currentPlayer] = playerValue[currentPlayer] + currentPot;
                     }
                 }
 
