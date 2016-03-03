@@ -64,7 +64,7 @@ namespace Day3PigDice
                 Console.WriteLine("--> Type anything to continue <--");
                 Console.ReadLine();
 
-                gamePlay(whoFirst, numOfPlayers, playerNames, playerValue);
+                gamePlay(whoFirst, numOfPlayers, playerNames, playerValue, aiStyle);
             }
         }
         private static void Welcome()
@@ -196,9 +196,27 @@ namespace Day3PigDice
             }
         }
 
-        private static bool bankOrRollAI()
+        private static bool bankOrRollAI(int aiStyle, int[] playerValue)
         {
-            //unfinished ai choices
+            switch(aiStyle)
+            {
+                case 4:
+                    return true;
+                case 3:
+                    return true;
+                case 2:
+                    return true;
+                default:
+                    int willBank = random.Next(0,1);
+                    if(willBank == 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+            }
             return true;
         }
 
@@ -282,7 +300,7 @@ namespace Day3PigDice
             }
         }
 
-        private static void gamePlay(int whoFirst, int numOfPlayers, string[] playerNames, int[] playerValue)
+        private static void gamePlay(int whoFirst, int numOfPlayers, string[] playerNames, int[] playerValue, int aiStyle)
         {
             bool isGameOver = false;
             int currentPlayer = whoFirst;
@@ -332,7 +350,7 @@ namespace Day3PigDice
                     }
                     else
                     {
-                        isBanking = bankOrRollAI();
+                        isBanking = bankOrRollAI(aiStyle, playerValue);
                     }
 
                     if (isBanking == true)
