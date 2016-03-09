@@ -11,7 +11,7 @@ namespace Day3PigDice
         static Random random = new Random();
         static bool Exit = false;
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             int numOfPlayers = 0;
             int aiStyle = 0;
@@ -27,14 +27,14 @@ namespace Day3PigDice
                 Welcome();
 
                 //get number of players
-                numOfPlayers = getNumPlayers();
+                numOfPlayers = GetNumPlayers();
 
                 //select dumb average careful smart AI
                 if (numOfPlayers == 1)
                 {
                     isComputerPlaying = true;
                     numOfPlayers = 2;
-                    aiStyle = getAIStyle();
+                    aiStyle = GetAiStyle();
                 }
                 //what are the players names?
                 if (isComputerPlaying == false)
@@ -42,12 +42,12 @@ namespace Day3PigDice
                     for (int i = 0; i < numOfPlayers; i++)
                     {
 
-                        playerNames[i] = getPlayerName(i);
+                        playerNames[i] = GetPlayerName(i);
                     }
                 }
                 else
                 {
-                    playerNames[0] = getPlayerName(0);
+                    playerNames[0] = GetPlayerName(0);
                     playerNames[1] = "Computer";
                 }
 
@@ -55,15 +55,15 @@ namespace Day3PigDice
 
                 Console.WriteLine("\nLet's see who goes first!\nWe roll until we get a player's number...");
 
-                whoFirst = getOrderResults(numOfPlayers);
+                whoFirst = GetOrderResults(numOfPlayers);
 
-                displayDieGraphics(whoFirst + 1);
+                DisplayDieGraphics(whoFirst + 1);
 
                 Console.WriteLine($"\n{playerNames[whoFirst]} will go first!");
                 Console.WriteLine("--> Type anything to continue <--");
                 Console.ReadLine();
 
-                gamePlay(whoFirst, numOfPlayers, playerNames, playerValue, aiStyle);
+                GamePlay(whoFirst, numOfPlayers, playerNames, playerValue, aiStyle);
             }
         }
         private static void Welcome()
@@ -78,7 +78,7 @@ namespace Day3PigDice
             Console.WriteLine(@"################################################################");
         }
 
-        private static int getNumPlayers()
+        private static int GetNumPlayers()
         {
             string userInput = "";
 
@@ -104,7 +104,7 @@ namespace Day3PigDice
 
         }
 
-        private static int getAIStyle()
+        private static int GetAiStyle()
         {
             string userInput = "";
 
@@ -137,7 +137,7 @@ namespace Day3PigDice
             }
         }
 
-        private static string getPlayerName(int whichPlayer)
+        private static string GetPlayerName(int whichPlayer)
         {
             string userInput = "";
 
@@ -146,7 +146,7 @@ namespace Day3PigDice
             return userInput;
         }
 
-        private static bool bankOrRoll()
+        private static bool BankOrRoll()
         {
             string userInput = "";
 
@@ -170,20 +170,18 @@ namespace Day3PigDice
             }
         }
 
-        private static int getOrderResults(int numOfPlayers)
+        private static int GetOrderResults(int numOfPlayers)
         {
             return random.Next(0, (numOfPlayers - 1));
         }
 
-        private static int rollDie()
+        private static int RollDie()
         {
-            int result = 0;
-
-            result = random.Next(1, 7);
+            int result = random.Next(1, 7);
             return result;
         }
 
-        private static int nextPlayer(int currentPlayer, int numOfPlayers)
+        private static int NextPlayer(int currentPlayer, int numOfPlayers)
         {
             if ((currentPlayer + 1) < numOfPlayers)
             {
@@ -195,7 +193,7 @@ namespace Day3PigDice
             }
         }
 
-        private static bool bankOrRollAI(int aiStyle, int[] playerValue, int currentPot)
+        private static bool BankOrRollAi(int aiStyle, int[] playerValue, int currentPot)
         {
             switch (aiStyle)
             {
@@ -248,7 +246,7 @@ namespace Day3PigDice
             }
         }
 
-        private static void displayDieGraphics(int currentRoll)
+        private static void DisplayDieGraphics(int currentRoll)
         {
             /* Console.WriteLine();
              Console.WriteLine(@" _________ ");
@@ -328,12 +326,12 @@ namespace Day3PigDice
             }
         }
 
-        private static void gamePlay(int whoFirst, int numOfPlayers, string[] playerNames, int[] playerValue, int aiStyle)
+        private static void GamePlay(int whoFirst, int numOfPlayers, string[] playerNames, int[] playerValue, int aiStyle)
         {
             int currentPlayer = whoFirst;
             bool isBanking = false;
 
-            clearPlayerValues(ref playerValue);
+            ClearPlayerValues(ref playerValue);
 
             while (true)
             {
@@ -354,9 +352,9 @@ namespace Day3PigDice
 
                     Console.WriteLine($"\nIt's {playerNames[currentPlayer]}'s turn!");
 
-                    currentRoll = rollDie();
+                    currentRoll = RollDie();
 
-                    displayDieGraphics(currentRoll);
+                    DisplayDieGraphics(currentRoll);
 
                     currentPot = currentPot + currentRoll;
 
@@ -375,11 +373,11 @@ namespace Day3PigDice
 
                     if (playerNames[currentPlayer] != "Computer" && currentRoll != 1)
                     {
-                        isBanking = bankOrRoll();
+                        isBanking = BankOrRoll();
                     }
                     else
                     {
-                        isBanking = bankOrRollAI(aiStyle, playerValue, currentPot);
+                        isBanking = BankOrRollAi(aiStyle, playerValue, currentPot);
                     }
 
                     //pause screen for computer
@@ -421,16 +419,16 @@ namespace Day3PigDice
                         Console.WriteLine($"Better luck next time...");
                     }
                     Console.WriteLine($"\n{playerNames[currentPlayer]} is the winner!");
-                    Exit = willExit();
+                    Exit = WillExit();
                     break;
                 }
 
                 isBanking = false;
-                currentPlayer = nextPlayer(currentPlayer, numOfPlayers);
+                currentPlayer = NextPlayer(currentPlayer, numOfPlayers);
             }
         }
 
-        private static void clearPlayerValues(ref int[] playerValues)
+        private static void ClearPlayerValues(ref int[] playerValues)
         {
             for(int i = 0; i < 4; i++)
             {
@@ -438,7 +436,7 @@ namespace Day3PigDice
             }
         }
 
-        private static bool willExit()
+        private static bool WillExit()
         {
             string userInput = "";
 
