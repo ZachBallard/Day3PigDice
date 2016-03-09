@@ -179,7 +179,7 @@ namespace Day3PigDice
         {
             int result = 0;
 
-            result = random.Next(1, 6);
+            result = random.Next(1, 7);
             return result;
         }
 
